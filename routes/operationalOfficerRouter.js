@@ -1,31 +1,34 @@
 const express = require('express');
 const router = express.Router();
 const operationalOfficerController = require('../controllers/operationalOfficerController');
-const { authenticate, isOperationalOfficer } = require('../middlewares/auth');
+const { requireAuthUser, hasRole } = require('../middlewares/auth');
 const uploadFile = require('../middlewares/uploadFile');
 const shipmentController = require('../controllers/shipmentController');
 
 // Get all shipments
-router.get('/shipments', authenticate, isOperationalOfficer, operationalOfficerController.getAllShipments);
+router.get('/shipments', requireAuthUser, hasRole('operationalOfficer'), operationalOfficerController.getAllShipments);
 
 // Get shipment by ID
-router.get('/shipments/:id', authenticate, isOperationalOfficer, operationalOfficerController.getShipmentById);
+router.get('/shipments/:id', requireAuthUser, hasRole('operationalOfficer'), operationalOfficerController.getShipmentById);
 
 // Create a new shipment
-router.post('/shipments', authenticate, isOperationalOfficer, operationalOfficerController.createShipment);
+router.post('/shipments', requireAuthUser, hasRole('operationalOfficer'), operationalOfficerController.createShipment);
 
 // Update shipment
-router.put('/shipments/:id', authenticate, isOperationalOfficer, operationalOfficerController.updateShipment);
+router.put('/shipments/:id', requireAuthUser, hasRole('operationalOfficer'), operationalOfficerController.updateShipment);
 
 // Delete shipment
-router.delete('/shipments/:id', authenticate, isOperationalOfficer, operationalOfficerController.deleteShipment);
+router.delete('/shipments/:id', requireAuthUser, hasRole('operationalOfficer'), operationalOfficerController.deleteShipment);
 
 // Get all quotes
-router.get('/quotes', authenticate, isOperationalOfficer, operationalOfficerController.getAllQuotes);
+router.get('/quotes', requireAuthUser, hasRole('operationalOfficer'), operationalOfficerController.getAllQuotes);
 
 // Upload document
-router.post('/documents', authenticate, isOperationalOfficer, uploadFile.single('document'), operationalOfficerController.uploadDocument);
+router.post('/documents', requireAuthUser, hasRole('operationalOfficer'), uploadFile.single('document'), operationalOfficerController.uploadDocument);
 
-router.get('/quotes/:id', authenticate, isOperationalOfficer, operationalOfficerController.getQuoteById);
+router.get('/quotes/:id', requireAuthUser, hasRole('operationalOfficer'), operationalOfficerController.getQuoteById);
+
+// Create client repository
+router.post('/clients/:clientId/repository', requireAuthUser, hasRole('operationalOfficer'), operationalOfficerController.createClientRepository);
 
 module.exports = router;

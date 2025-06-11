@@ -1,33 +1,33 @@
 const express = require('express');
 const router = express.Router();
 const financialOfficerController = require('../controllers/financialOfficerController');
-const { authenticate, isFinancialOfficer } = require('../middlewares/auth');
+const { requireAuthUser, hasRole } = require('../middlewares/auth');
 
 // Generate invoice
-router.post('/invoices', authenticate, isFinancialOfficer, financialOfficerController.generateInvoice);
+router.post('/invoices', requireAuthUser, hasRole('financialOfficer'), financialOfficerController.generateInvoice);
 
 // Get all invoices
-router.get('/invoices', authenticate, isFinancialOfficer, financialOfficerController.getAllInvoices);
+router.get('/invoices', requireAuthUser, hasRole('financialOfficer'), financialOfficerController.getAllInvoices);
 
 // Get invoice by ID
-router.get('/invoices/:id', authenticate, isFinancialOfficer, financialOfficerController.getInvoiceById);
+router.get('/invoices/:id', requireAuthUser, hasRole('financialOfficer'), financialOfficerController.getInvoiceById);
 
 // Update invoice
-router.put('/invoices/:id', authenticate, isFinancialOfficer, financialOfficerController.updateInvoice);
+router.put('/invoices/:id', requireAuthUser, hasRole('financialOfficer'), financialOfficerController.updateInvoice);
 
 // Send invoice
-router.post('/invoices/:id/send', authenticate, isFinancialOfficer, financialOfficerController.sendInvoice);
+router.post('/invoices/:id/send', requireAuthUser, hasRole('financialOfficer'), financialOfficerController.sendInvoice);
 
 // Get all clients
-router.get('/clients', authenticate, isFinancialOfficer, financialOfficerController.getAllClients);
+router.get('/clients', requireAuthUser, hasRole('financialOfficer'), financialOfficerController.getAllClients);
 
 // Get quote by ID
-router.get('/quotes/:id', authenticate, isFinancialOfficer, financialOfficerController.getQuoteById);
+router.get('/quotes/:id', requireAuthUser, hasRole('financialOfficer'), financialOfficerController.getQuoteById);
 
 // Get user by ID
-router.get('/users/:id', authenticate, isFinancialOfficer, financialOfficerController.getUserById);
+router.get('/users/:id', requireAuthUser, hasRole('financialOfficer'), financialOfficerController.getUserById);
 
 // Get all shipments
-router.get('/shipments', authenticate, isFinancialOfficer, financialOfficerController.getAllShipments);
+router.get('/shipments', requireAuthUser, hasRole('financialOfficer'), financialOfficerController.getAllShipments);
 
 module.exports = router;

@@ -3,14 +3,16 @@ var express = require("express");
 var path = require("path");
 var cookieParser = require("cookie-parser");
 var logger = require("morgan");
+const cors = require("cors");
+
 
 const http = require("http");
+
 require("dotenv").config();
 
 const { connectToMongoDb } = require("./db/db");
 
 var indexRouter = require("./routes/index");
-var osRouter = require("./routes/osRouter");
 var usersRouter = require("./routes/usersRouter");
 var adminRouter = require("./routes/adminRouter");
 var clientRouter = require("./routes/clientRouter");
@@ -28,6 +30,15 @@ var leadRouter = require("./routes/leadRouter");
 
 var app = express();
 
+
+app.use(cors({
+    origin: "http://localhost:3000", // Your frontend's origin
+    credentials: true, // Allow cookies to be sent with cross-origin requests
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'], // Explicitly allow common methods
+    allowedHeaders: ['Content-Type', 'Authorization','cookies'], // Explicitly allow common headers
+}));
+
+
 app.use(logger("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
@@ -35,7 +46,6 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 
 app.use("/index", indexRouter);
-app.use("/os", osRouter);
 app.use("/users", usersRouter);
 app.use("/admin", adminRouter);
 app.use("/client", clientRouter);

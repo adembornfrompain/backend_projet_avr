@@ -16,7 +16,7 @@ exports.getAllShipments = async (req, res) => {
 // Get client's shipments (Client)
 exports.getClientShipments = async (req, res) => {
     try {
-        const shipments = await Shipment.find({ clientId: req.user._id })
+        const shipments = await Shipment.find({ clientId: req.query.userId })
             .select('origin destination status currentLocation estimatedDeliveryDate')
             .sort({ createdAt: -1 });
 

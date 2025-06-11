@@ -1,20 +1,17 @@
 const express = require('express');
 const router = express.Router();
 const quoteController = require('../controllers/quoteController');
-const { authenticate, isClient, isSalesAgent } = require('../middlewares/auth');
-
-// Apply authentication to all routes
-router.use(authenticate);
+const { requireAuthUser, hasRole } = require('../middlewares/auth');
 
 // Client Routes
-router.post('/request', isClient, quoteController.requestQuote);
-router.get('/my-quotes', isClient, quoteController.getClientQuotes);
-router.get('/:id', isClient, quoteController.getQuoteById);
+router.post('/request', requireAuthUser, hasRole('client'), quoteController.requestQuote);
+router.get('/my-quotes', requireAuthUser, hasRole('client'), quoteController.getClientQuotes);
+router.get('/:id', requireAuthUser, hasRole('client'), quoteController.getQuoteById);
 
 // Sales Agent Routes
-router.get('/all', isSalesAgent, quoteController.getAllQuotes);
-router.get('/pending', isSalesAgent, quoteController.getPendingQuotes);
-router.put('/:id/accept', isSalesAgent, quoteController.acceptQuote);
-router.put('/:id/reject', isSalesAgent, quoteController.rejectQuote);
+router.get('/all', requireAuthUser, hasRole('salesAgent'), quoteController.getAllQuotes);
+router.get('/pending', requireAuthUser, hasRole('salesAgent'), quoteController.getPendingQuotes);
+router.put('/:id/accept', requireAuthUser, hasRole('salesAgent'), quoteController.acceptQuote);
+router.put('/:id/reject', requireAuthUser, hasRole('salesAgent'), quoteController.rejectQuote);
 
-module.exports = router; 
+module.exports = router;

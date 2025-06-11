@@ -5,6 +5,7 @@
 - [ ] Express
 - [ ] MongoDB
 - [ ] Mongoose
+- [ ] jsonwebtoken
 
 ## Development Setup
 - [ ] VSCode

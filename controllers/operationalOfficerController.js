@@ -156,3 +156,30 @@ module.exports.getQuoteById = async (req, res) => {
         res.status(500).json({ message: 'Server error', error: error.message });
     }
 };
+
+// Create client repository
+module.exports.createClientRepository = async (req, res) => {
+    try {
+        const clientId = req.params.clientId;
+
+        // Check if the client exists
+        const client = await User.findById(clientId);
+        if (!client) {
+            return res.status(404).json({ message: 'Client not found' });
+        }
+
+        // Create a new repository for the client
+        const repository = {
+            clientId: clientId,
+            documents: []
+        };
+
+        // Save the repository to the database
+        client.repository = repository;
+        await client.save();
+
+        res.status(201).json({ message: 'Client repository created successfully', repositoryId: client.repository._id });
+    } catch (error) {
+        res.status(500).json({ message: 'Error creating client repository', error: error.message });
+    }
+};

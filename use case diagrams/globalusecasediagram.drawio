@@ -1,0 +1,49 @@
+<mxfile host="65bd71144e">
+    <diagram id="8FAXAYbO3AshXbyFBECz" name="Page-1">
+        <mxGraphModel dx="1621" dy="1039" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+            <root>
+                <mxCell id="0"/>
+                <mxCell id="1" parent="0"/>
+                <mxCell id="2" value="Sales Agent" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;" vertex="1" parent="1">
+                    <mxGeometry x="1350" y="530" width="50" height="100" as="geometry"/>
+                </mxCell>
+                <mxCell id="3" value="Client" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;" vertex="1" parent="1">
+                    <mxGeometry x="60" y="260" width="50" height="100" as="geometry"/>
+                </mxCell>
+                <mxCell id="5" value="Operaational officer&amp;nbsp;&lt;div&gt;&lt;br&gt;&lt;/div&gt;" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;" vertex="1" parent="1">
+                    <mxGeometry x="1325" y="410" width="50" height="100" as="geometry"/>
+                </mxCell>
+                <mxCell id="6" value="visitor" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;" vertex="1" parent="1">
+                    <mxGeometry x="60" y="60" width="50" height="100" as="geometry"/>
+                </mxCell>
+                <mxCell id="7" value="" style="rounded=0;whiteSpace=wrap;html=1;movable=1;resizable=1;rotatable=1;deletable=1;editable=1;locked=0;connectable=1;" vertex="1" parent="1">
+                    <mxGeometry x="150" y="30" width="1030" height="1080" as="geometry"/>
+                </mxCell>
+                <mxCell id="13" value="Admin" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;" vertex="1" parent="1">
+                    <mxGeometry x="1275" y="200" width="50" height="100" as="geometry"/>
+                </mxCell>
+                <mxCell id="15" value="View Landing Page&amp;nbsp;" style="ellipse;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+                    <mxGeometry x="190" y="50" width="280" height="50" as="geometry"/>
+                </mxCell>
+                <mxCell id="16" value="Sign Up" style="ellipse;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+                    <mxGeometry x="270" y="110" width="280" height="50" as="geometry"/>
+                </mxCell>
+                <mxCell id="17" value="Log&amp;nbsp; In" style="ellipse;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+                    <mxGeometry x="200" y="170" width="280" height="50" as="geometry"/>
+                </mxCell>
+                <mxCell id="18" value="Manage profile&amp;nbsp;" style="ellipse;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+                    <mxGeometry x="190" y="260" width="280" height="50" as="geometry"/>
+                </mxCell>
+                <mxCell id="19" value="Request a Quote&amp;nbsp;" style="ellipse;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+                    <mxGeometry x="320" y="330" width="280" height="50" as="geometry"/>
+                </mxCell>
+                <mxCell id="20" value="Track Shipment" style="ellipse;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+                    <mxGeometry x="220" y="390" width="280" height="50" as="geometry"/>
+                </mxCell>
+                <mxCell id="21" value="Maanage documents&amp;nbsp;" style="ellipse;whiteSpace=wrap;html=1;strokeWidth=1;fontSize=17;" vertex="1" parent="1">
+                    <mxGeometry x="340" y="470" width="280" height="50" as="geometry"/>
+                </mxCell>
+            </root>
+        </mxGraphModel>
+    </diagram>
+</mxfile>

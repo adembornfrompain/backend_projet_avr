@@ -21,3 +21,14 @@
 - [ ] Data validation and sanitization.
 - [ ] Shipment tracking and status updates.
 - [ ] Logistics data management (e.g., routes, carriers, pricing).
+- [ ] Simplified authentication middleware using `requireAuthUser` and `hasRole`.
+- [ ] Updated user routes to use the `requireAuthUser` middleware.
+- [ ] Updated admin routes to use the `requireAuthUser` and `hasRole` middlewares.
+- [ ] Updated client routes to use the `requireAuthUser` and `hasRole` middlewares.
+- [ ] Updated sales agent routes to use the `requireAuthUser` and `hasRole` middlewares.
+- [ ] Updated financial officer routes to use the `requireAuthUser` and `hasRole` middlewares.
+- [ ] Updated operational officer routes to use the `requireAuthUser` and `hasRole` middlewares.
+- [ ] Updated document routes to use the `requireAuthUser` and `hasRole` middlewares.
+- [ ] Updated shipment routes to use the `requireAuthUser` and `hasRole` middlewares.
+- [ ] Updated invoice routes to use the `requireAuthUser` and `hasRole` middlewares.
+- [ ] Updated quote routes to use the `requireAuthUser` and `hasRole` middlewares.

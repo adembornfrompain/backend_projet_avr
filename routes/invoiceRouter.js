@@ -1,68 +1,61 @@
 const express = require('express');
 const router = express.Router();
 const invoiceController = require('../controllers/invoiceController');
-const { 
-    authenticate, 
-    isClient, 
-    isFinancialOfficer 
-} = require('../middlewares/auth');
+const { requireAuthUser, hasRole } = require('../middlewares/auth');
 const uploadFile = require('../middlewares/uploadFile');
-
-// Apply authentication to all routes
-router.use(authenticate);
 
 // Client Routes
 router.get('/my-invoices', 
-    isClient, 
+    requireAuthUser, hasRole('client'),
     invoiceController.getClientInvoices
 );
 
 // Financial Officer Routes
 router.post('/create', 
-    isFinancialOfficer, 
+    requireAuthUser, hasRole('financialOfficer'),
     invoiceController.createInvoice
 );
 
 router.get('/all', 
-    isFinancialOfficer, 
+    requireAuthUser, hasRole('financialOfficer'),
     invoiceController.getAllInvoices
 );
 
 router.get('/pending', 
-    isFinancialOfficer, 
+    requireAuthUser, hasRole('financialOfficer'),
     invoiceController.getPendingInvoices
 );
 
 router.get('/overdue', 
-    isFinancialOfficer, 
+    requireAuthUser, hasRole('financialOfficer'),
     invoiceController.getOverdueInvoices
 );
 
 router.put('/:id/status', 
-    isFinancialOfficer, 
+    requireAuthUser, hasRole('financialOfficer'),
     invoiceController.updateInvoiceStatus
 );
 
 // Shared Routes (with role-based access)
 router.get('/:id', 
-    [isClient, isFinancialOfficer], 
+    requireAuthUser, hasRole('client', 'financialOfficer'),
     invoiceController.getInvoiceById
 );
 
 router.post(
     '/upload',
-    isFinancialOfficer,
+    requireAuthUser, hasRole('financialOfficer'),
     uploadFile.single('invoice'),
     invoiceController.uploadInvoice
 );
 
 router.get('/download/:id',
-    isFinancialOfficer,
+    requireAuthUser, hasRole('financialOfficer'),
     invoiceController.downloadInvoice
 );
 
 router.put('/:id',
-    isFinancialOfficer,
+    requireAuthUser, hasRole('financialOfficer'),
     invoiceController.updateInvoice
 );
 

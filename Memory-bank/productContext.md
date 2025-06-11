@@ -4,7 +4,7 @@
 - [ ] To provide a robust and scalable backend for a freight forwarding agency application.
 
 ## Problems It Solves
-- [ ] Efficient management of shipments, tracking, and logistics data.
+- [ ] Efficient management of shipments,and logistics data.
 - [ ] Secure user authentication and authorization for agency staff and clients.
 - [ ] API endpoint management for integration with other systems (e.g., customs, carriers).
 

@@ -3,107 +3,114 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const crypto = require("crypto");
 
-// Register visitor (sign up)
+// Helper function to generate JWT token
+const createToken = (id) => {
+  return jwt.sign({ id }, process.env.JWT_SECRET, {
+    expiresIn: "48h",
+  });
+};
+
 module.exports.addUser = async (req, res) => {
+    try {
+        const { name, last, email, phone, password } = req.body;
+
+        // Basic validation
+        if (!name || !email || !password) {
+            return res
+                .status(400)
+                .json({ message: "Name, email and password are required" });
+        }
+
+        // Check if user already exists
+        const existingUser = await User.findOne({ email });
+        if (existingUser) {
+            return res.status(409).json({ message: "Email already registered" });
+        }
+
+        const hashedPassword = await bcrypt.hash(password, 10);
+
+        // --- MODIFICATION START ---
+        // Determine the role based on the email domain
+        let determinedRole = "client"; // Default to client
+
+        if (email.endsWith("@salesbeta.com")) {
+            determinedRole = "salesAgent";
+        } else if (email.endsWith("@operationbeta.com")) {
+            determinedRole = "operationalOfficer";
+        } else if (email.endsWith("@financialbeta.com")) {
+            determinedRole = "financialOfficer";
+        } else if (email.endsWith("@adminbeta.com")) {
+            determinedRole = "admin";
+        }
+        // --- MODIFICATION END ---
+
+
+        const newUser = new User({
+            name,
+            last,
+            email,
+            password: hashedPassword,
+            phone,
+            role: determinedRole, // Use the determined role
+        });
+
+        const user = await newUser.save();
+
+        // Generate token for immediate login after registration
+        const token = createToken(user._id);
+
+        // Return user info without sensitive data
+        const userInfo = {
+            _id: user._id,
+            name: user.name,
+            email: user.email,
+            role: user.role,
+        };
+
+        res.status(201).json({
+            message: "Registration successful",
+            token,
+            user: userInfo,
+        });
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
+
+
+// Login
+module.exports.login = async (req, res) => {
   try {
-    const { name,last , email, password, phone } = req.body;
+    const { email, password } = req.body;
 
-    // Basic validation
-    if (!email || !password || !name) {
-      return res
-        .status(400)
-        .json({ message: "Name, email and password are required" });
+    const user = await User.findOne({ email }).select("+password");
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
     }
 
-    // Check if user already exists
-    const existingUser = await User.findOne({ email });
-    if (existingUser) {
-      return res.status(409).json({ message: "Email already registered" });
-    }
+    const token = createToken(user._id); // your JWT generation logic
 
-    const hashedPassword = await bcrypt.hash(password, 10);
-    let { role } = req.body;
-
-    if (!role) {
-        role = "client"; // Set default role as client
-    }
-
-    // Email domain validation based on role
-    let validDomain = true;
-    switch (role) {
-      case "salesAgent":
-        validDomain = email.endsWith("@salesbeta.com");
-        break;
-      case "operationalOfficer":
-        validDomain = email.endsWith("@operationbeta.com");
-        break;
-      case "financialOfficer":
-        validDomain = email.endsWith("@financialbeta.com");
-        break;
-      case "admin":
-        validDomain = email.endsWith("@adminbeta.com");
-        break;
-      case "client":
-        break; // No domain restriction for clients
-      default:
-        return res.status(400).json({ message: "Invalid role" });
-    }
-
-    if (!validDomain) {
-      return res.status(400).json({ message: "Invalid email domain for this role" });
-    }
-
-    const newUser = new User({
-      name,
-      email,
-      password: hashedPassword,
-      phone,
-      role,
+    // ✅ Set secure HTTP-only cookie here
+    res.cookie("token", token, {
+      httpOnly: false,
+      secure: process.env.NODE_ENV === "production", // only HTTPS in production
+      maxAge: 3 * 24 * 60 * 60 * 1000, // 3 days
     });
 
-    const userAdded = await newUser.save();
-
-    // Generate token for immediate login after registration
-    const token = jwt.sign({ id: userAdded._id }, process.env.JWT_SECRET, {
-      expiresIn: "48h",
-    });
-
-    // Return user info without sensitive data
+    // Return only the necessary user info (without token)
     const userInfo = {
-      _id: userAdded._id,
-      name: userAdded.name,
-      email: userAdded.email,
-      role: userAdded.role,
+      _id: user._id,
+      name: user.name,
+      email: user.email,
+      role: user.role
     };
 
-    res.status(201).json({ 
-      message: "Registration successful", 
-      token, 
-      user: userInfo 
-    });
+    // ✅ Send response
+    res.status(200).json({ message: "connected", user: userInfo });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
 };
-
-// Login
-module.exports.login = async (req,res)=>{
-    try {
-        const { email , password} = req.body
-        
-        const user = await User.login(email,password)
-        const token = createToken(user._id)
-        res.cookie('jwt_token',token,{httpOnly:true,maxAge:60*1000})
-        res.status(200).json({message :"connected",user : user})
-    } catch (error) {
-        res.status(500).json({message:error.message} )
-    }
-}
-
-const jwt = require("jsonwebtoken")
-const createToken = (_id)=>{
-    return jwt.sign({_id},process.env.JWT_SECRET,{expiresIn:'3d'})
-}
 
 
 

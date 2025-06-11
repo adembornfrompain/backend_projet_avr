@@ -17,38 +17,15 @@ module.exports.uploadDocument = async (req, res) => {
 
         let userId;
 
-        if (shipmentId) {
-            // Verify shipment exists
-            const shipment = await Shipment.findById(shipmentId);
-            if (!shipment) {
-                return res.status(404).json({ message: 'Shipment not found' });
-            }
-            userId = shipment.clientId;
-
-            // Check permissions based on role
-            if (req.user.role === 'client' && shipment.clientId.toString() !== req.user._id.toString()) {
-                return res.status(403).json({ message: 'Unauthorized to upload documents for this shipment' });
-            }
-        } else if (clientId) {
+        if (clientId) {
             // Verify client exists
             const client = await User.findById(clientId);
             if (!client) {
                 return res.status(404).json({ message: 'Client not found' });
             }
             userId = clientId;
-        } else if (req.user.role === 'financialOfficer' || req.user.role === 'operationalOfficer') {
-            if (!clientId) {
-                return res.status(400).json({ message: 'clientId must be provided when uploading as Financial/Operational Officer' });
-            }
-             // Verify client exists
-            const client = await User.findById(clientId);
-            if (!client) {
-                return res.status(404).json({ message: 'Client not found' });
-            }
-            userId = clientId;
-        }
-         else {
-            return res.status(400).json({ message: 'Either shipmentId or clientId must be provided' });
+        } else {
+            return res.status(400).json({ message: 'clientId must be provided' });
         }
 
         const document = new Document({
@@ -73,12 +50,9 @@ module.exports.uploadDocument = async (req, res) => {
                 documentType: document.documentType,
                 documentCategory: document.documentCategory,
                 fileName: document.fileName,
-                status: document.status
+                documentCategory: document.documentCategory
             }
         });
-
-        // Send notification
-        console.log('Notification: New document uploaded for shipment ' + shipmentId);
 
     } catch (error) {
         res.status(500).json({ message: 'Error uploading document', error: error.message });
@@ -364,7 +338,6 @@ exports.verifyDocument = async (req, res) => {
         }
         
         // Update document verification status
-        document.status = 'verified';
         document.verifiedBy = req.user._id;  
         document.verifiedAt = new Date();
         
@@ -380,7 +353,6 @@ exports.verifyDocument = async (req, res) => {
                 documentType: document.documentType,
                 documentCategory: document.documentCategory,
                 fileName: document.fileName,
-                status: document.status,
                 verifiedAt: document.verifiedAt
             }
         });
